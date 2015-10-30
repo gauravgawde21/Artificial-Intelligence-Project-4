@@ -1,0 +1,28 @@
+append_nodes([],L,L).
+append_nodes([X|L1],L2,[X|L3]) :- append_nodes(L1,L2,L3).
+
+member_nodes(X,[X|R]).
+member_nodes(X,[Y|R]):- member_nodes(X,R).
+
+even_nodes([],[]).
+even_nodes([X,_|L],[X|R]) :-
+      even_nodes(L,R).
+
+bfs_search(Start, Solution) :- bfs([[Start]],Solution).
+                          %even_nodes(Solution, Sol).
+
+bfs([[A|Path]|_], [A|Path]) :- goal(A,_).
+
+bfs([Path|Paths], Solution) :-
+  successor_nodes(Path, NewPaths),
+   append_nodes(Paths, NewPaths, Queue),
+   bfs(Queue, Solution).
+
+
+successor_nodes([A|Path], NewPaths):- setof([Next, Dir, A|Path],
+			    (connected(A, Next, Dir), not(member_nodes(Next,[A|Path])) ),
+			     NewPaths),
+            !.
+
+successor_nodes(Path, []).
+

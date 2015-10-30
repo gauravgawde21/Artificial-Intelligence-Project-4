@@ -1,0 +1,11 @@
+member_node(X,[X|R]).
+member_node(X,[Y|R]):- member_node(X,R).
+
+append_node([],X,X).
+append_node([X|Y],Z,[X|W]) :- append_node(Y,Z,W).
+
+goal_state(cell1,null).
+
+dfs_search(Start, Visited, [Start], [Direction]):- goal_state(Start, Direction).
+
+dfs_search(Start, Visited, [Start|Rest], [StartDir|RestDir]):- connected(Start, Next, StartDir),not member_node(Next, Visited),dfs_search(Next, [Start|Visited], Rest, RestDir).
